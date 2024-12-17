@@ -58,10 +58,12 @@ endif()
 list(APPEND GAME_SOURCE
      Classes/AppDelegate.cpp
      Classes/HelloWorldScene.cpp
+     Classes/GameScene.cpp
      )
 list(APPEND GAME_HEADER
      Classes/AppDelegate.h
      Classes/HelloWorldScene.h
+     Classes/GameScene.h
      )
 
 if(ANDROID)
@@ -131,8 +133,9 @@ endif()
 
 target_link_libraries(${APP_NAME} cocos2d)
 target_include_directories(${APP_NAME}
-        PRIVATE Classes
-        PRIVATE ${COCOS2DX_ROOT_PATH}/cocos/audio/include/
+PRIVATE Classes
+PRIVATE Common
+PRIVATE ${COCOS2DX_ROOT_PATH}/cocos/audio/include/
 )
 
 # mark app resources
