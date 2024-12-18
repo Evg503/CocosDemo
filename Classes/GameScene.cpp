@@ -21,10 +21,16 @@ bool GameScene::init()
         switch (key_code)
         {
         case cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW:
-            _dragon_speed = 1000;
+            _dragon_data.up();
             break;
         case cocos2d::EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-            _dragon_speed = -1000;
+            _dragon_data.down();
+            break;
+        case cocos2d::EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+            _dragon_data.left();
+            break;
+        case cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+            _dragon_data.right();
             break;
 
         default:
@@ -38,8 +44,9 @@ bool GameScene::init()
         {
         case cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW:
         case cocos2d::EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-            _dragon_speed = 0;
-            _label->setString(std::to_string(_dragon_y) + " px/s");
+        case cocos2d::EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+        case cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+            _dragon_data.stop();
             break;
 
         default:
@@ -74,8 +81,8 @@ void GameScene::addActor()
     }
     auto visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
 
-    int dx = 207;
-    int dy = 207;
+    float dx = 207;
+    float dy = 207;
 
     // manually add frames to the frame cache
     auto frame0 = cocos2d::SpriteFrame::createWithTexture(_texture, cocos2d::Rect(dx * 0, dy * 0, dx, dy));
@@ -89,8 +96,10 @@ void GameScene::addActor()
     // Animation using Sprite BatchNode
     //
     _sprite = cocos2d::Sprite::createWithSpriteFrame(frame0);
-    _dragon_y = visibleSize.height / 2;
-    _sprite->setPosition(cocos2d::Vec2(dx/2 , _dragon_y));
+    _dragon_data.pos = {dx/2,visibleSize.height/2};
+    _dragon_data.pos_bound.setRect(dx/2, dy/2, visibleSize.width/2, visibleSize.height-dy/2);
+
+    _sprite->setPosition(_dragon_data.pos);
     addChild(_sprite);
 
     cocos2d::Vector<cocos2d::SpriteFrame *>
@@ -141,11 +150,8 @@ void GameScene::addBackButton()
 
 void GameScene::update(float delta)
 {
-    if (_dragon_speed != 0)
+    if (_dragon_data.update(delta))
     {
-        _dragon_y += _dragon_speed * delta;
-        _dragon_y = clamp(_dragon_y, 100.f, 600.f);
-        _sprite->setPositionY(_dragon_y);
-        //_label->setString(std::to_string(_dragon_y) + " px/s" );
+        _sprite->setPosition(_dragon_data.pos);
     }
 }
