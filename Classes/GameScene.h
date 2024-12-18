@@ -7,22 +7,22 @@ struct DragonData
     cocos2d::Vec2 pos{0, 0};
     cocos2d::Vec2 speed{0, 0};
     cocos2d::Rect pos_bound{{0, 0}, {0, 0}};
-    cocos2d::Vec2 maxspeed{1000, 1000};
+    cocos2d::Vec2 maxspeed{500, 500};
     void up()
     {
-        speed.y = maxspeed.y;
+        speed.y += maxspeed.y;
     }
     void down()
     {
-        speed.y = -maxspeed.y;
+        speed.y -= maxspeed.y;
     }
     void right()
     {
-        speed.x = maxspeed.x;
+        speed.x += maxspeed.x;
     }
     void left()
     {
-        speed.x = -maxspeed.x;
+        speed.x -= maxspeed.x;
     }
     void stop()
     {

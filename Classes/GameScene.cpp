@@ -43,10 +43,16 @@ bool GameScene::init()
         switch (key_code)
         {
         case cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW:
+            _dragon_data.down();
+            break;
         case cocos2d::EventKeyboard::KeyCode::KEY_DOWN_ARROW:
+            _dragon_data.up();
+            break;
         case cocos2d::EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+            _dragon_data.right();
+            break;
         case cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-            _dragon_data.stop();
+            _dragon_data.left();
             break;
 
         default:
