@@ -85,46 +85,20 @@ void GameScene::addActor()
         removeChild(_sprite);
         _sprite = nullptr;
     }
-    auto visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
-
-    float dx = 207;
-    float dy = 207;
-
-    // manually add frames to the frame cache
-    auto frame0 = cocos2d::SpriteFrame::createWithTexture(_texture, cocos2d::Rect(dx * 0, dy * 0, dx, dy));
-    auto frame1 = cocos2d::SpriteFrame::createWithTexture(_texture, cocos2d::Rect(dx * 1, dy * 0, dx, dy));
-    auto frame2 = cocos2d::SpriteFrame::createWithTexture(_texture, cocos2d::Rect(dx * 2, dy * 0, dx, dy));
-    auto frame3 = cocos2d::SpriteFrame::createWithTexture(_texture, cocos2d::Rect(dx * 3, dy * 0, dx, dy));
-    auto frame4 = cocos2d::SpriteFrame::createWithTexture(_texture, cocos2d::Rect(dx * 0, dy * 1, dx, dy));
-    auto frame5 = cocos2d::SpriteFrame::createWithTexture(_texture, cocos2d::Rect(dx * 1, dy * 1, dx, dy));
 
     //
     // Animation using Sprite BatchNode
     //
-    _sprite = cocos2d::Sprite::createWithSpriteFrame(frame0);
+    _sprite = createDragonAnimation(true);
+
+    auto visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
+    float dx = 207;
+    float dy = 207;
     _dragon_data.pos = {dx/2,visibleSize.height/2};
     _dragon_data.pos_bound.setRect(dx/2, dy/2, visibleSize.width/2, visibleSize.height-dy/2);
 
     _sprite->setPosition(_dragon_data.pos);
     addChild(_sprite);
-
-    cocos2d::Vector<cocos2d::SpriteFrame *>
-        animFrames(6);
-    animFrames.pushBack(frame0);
-    animFrames.pushBack(frame1);
-    animFrames.pushBack(frame2);
-    animFrames.pushBack(frame3);
-    animFrames.pushBack(frame4);
-    animFrames.pushBack(frame5);
-
-    auto animation = cocos2d::Animation::createWithSpriteFrames(animFrames, 0.2f);
-    auto animate = cocos2d::Animate::create(animation);
-    auto seq = cocos2d::Sequence::create(
-        cocos2d::FlipX::create(true),
-        animate,
-        nullptr);
-
-    _sprite->runAction(cocos2d::RepeatForever::create(seq));
 }
 void GameScene::addBackButton()
 {
@@ -160,4 +134,34 @@ void GameScene::update(float delta)
     {
         _sprite->setPosition(_dragon_data.pos);
     }
+}
+cocos2d::Sprite* GameScene::createDragonAnimation(bool isFlip)
+{
+    float dx = 207;
+    float dy = 207;
+
+    // manually add frames to the frame cache
+    auto frame0 = cocos2d::SpriteFrame::createWithTexture(_texture, cocos2d::Rect(dx * 0, dy * 0, dx, dy));
+    auto frame1 = cocos2d::SpriteFrame::createWithTexture(_texture, cocos2d::Rect(dx * 1, dy * 0, dx, dy));
+    auto frame2 = cocos2d::SpriteFrame::createWithTexture(_texture, cocos2d::Rect(dx * 2, dy * 0, dx, dy));
+    auto frame3 = cocos2d::SpriteFrame::createWithTexture(_texture, cocos2d::Rect(dx * 3, dy * 0, dx, dy));
+    auto frame4 = cocos2d::SpriteFrame::createWithTexture(_texture, cocos2d::Rect(dx * 0, dy * 1, dx, dy));
+    auto frame5 = cocos2d::SpriteFrame::createWithTexture(_texture, cocos2d::Rect(dx * 1, dy * 1, dx, dy));
+
+    // Animation using Sprite BatchNode
+    auto sprite = cocos2d::Sprite::createWithSpriteFrame(frame0);
+
+    cocos2d::Vector<cocos2d::SpriteFrame *> animFrames(6);
+    animFrames.pushBack(frame0);
+    animFrames.pushBack(frame1);
+    animFrames.pushBack(frame2);
+    animFrames.pushBack(frame3);
+    animFrames.pushBack(frame4);
+    animFrames.pushBack(frame5);
+
+    auto animation = cocos2d::Animation::createWithSpriteFrames(animFrames, 0.2f);
+    auto animate = cocos2d::Animate::create(animation);
+    sprite->setFlippedX(isFlip);
+    sprite->runAction(cocos2d::RepeatForever::create(animate));
+   return sprite;
 }

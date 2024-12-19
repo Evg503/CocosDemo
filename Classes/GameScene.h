@@ -53,6 +53,8 @@ public:
 private:
     void addBackButton();
     void addActor();
+    void addEnemy(const cocos2d::Vec2 &position);
+    cocos2d::Sprite *createDragonAnimation(bool isFlip);
 
     DragonData _dragon_data;
 
