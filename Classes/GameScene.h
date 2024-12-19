@@ -2,6 +2,9 @@
 
 #include "cocos2d.h"
 
+constexpr int PLAYER_TAG = 1;
+constexpr int ENEMY_TAG = 2;
+
 struct DragonData
 {
     cocos2d::Vec2 pos{0, 0};
@@ -49,12 +52,14 @@ public:
     void update(float delta) override;
 
     CREATE_FUNC(GameScene);
+    bool onContactBegin(cocos2d::PhysicsContact &contact);
 
 private:
     void addBackButton();
     void addActor();
     void addEnemy(const cocos2d::Vec2 &position);
     cocos2d::Sprite *createDragonAnimation(bool isFlip);
+    void emitEnemyDragons(float interval);
 
     DragonData _dragon_data;
 
